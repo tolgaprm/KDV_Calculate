@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.tolgapirim.kdvhesaplama.databinding.ActivityMainBinding
-import java.math.MathContext
-import java.text.DecimalFormat
 import java.text.NumberFormat
 
 class MainActivity : AppCompatActivity() {
@@ -24,17 +22,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+        binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             // islem kısmı sonuc olarak kdvli veya kdvsiz olarak ayarladım, butona basdığımda hangisine göre işlem yapacağımı belirlemek için
             when(checkedId){
-                R.id.kdv_dahil_kdvsiz_ilk_fiyat -> {binding.textView3.setText(getString(R.string.kdv_dahil_tutar)); islem= KDVSIZ}
-                else -> {binding.textView3.setText(getString(R.string.kdv_haric_tutar)); islem = KDVLI}
+                R.id.kdv_dahil_kdvsiz_ilk_fiyat -> {
+                    binding.textView3.text = getString(R.string.kdv_dahil_tutar); islem= KDVSIZ}
+                else -> {
+                    binding.textView3.text = getString(R.string.kdv_haric_tutar); islem = KDVLI}
             }
 
         }
 
 
-        binding.radioGroupKDVOrani.setOnCheckedChangeListener { group, checkedId ->
+        binding.radioGroupKDVOrani.setOnCheckedChangeListener { _, checkedId ->
             when(checkedId){
                 R.id.yuzde1 -> {binding.kdvTutariText.visibility = View.INVISIBLE; kdvOrani = 0.1}
                 R.id.yuzde8 -> {binding.kdvTutariText.visibility = View.INVISIBLE; kdvOrani = 0.8}
@@ -59,12 +59,12 @@ class MainActivity : AppCompatActivity() {
 
 
         if (islem == KDVLI){
-            binding.sonucKdvHaricTutar.setText(getString(R.string.kdv_haric_tutar_s,(fiyat)))
-            binding.sonucKdvDahilTutar.setText(getString(R.string.kdv_dahil_tutar_s,(sonuc)))
+            binding.sonucKdvHaricTutar.text = getString(R.string.kdv_haric_tutar_s,(fiyat))
+            binding.sonucKdvDahilTutar.text = getString(R.string.kdv_dahil_tutar_s,(sonuc))
 
         }else{
-            binding.sonucKdvDahilTutar.setText(getString(R.string.kdv_dahil_tutar_s,(fiyat)))
-            binding.sonucKdvHaricTutar.setText(getString(R.string.kdv_haric_tutar_s,(sonuc)))
+            binding.sonucKdvDahilTutar.text = getString(R.string.kdv_dahil_tutar_s,(fiyat))
+            binding.sonucKdvHaricTutar.text = getString(R.string.kdv_haric_tutar_s,(sonuc))
         }
 
 
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if(islem == KDVLI){
-                    kdvTutar = fiyat * kdvOrani!!
+                    kdvTutar = fiyat * kdvOrani
                     sonuc = fiyat + kdvTutar
 
                     sonucYazdir(fiyat,sonuc,KDVLI)
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
 
                 }else if(islem == KDVSIZ){
-                    sonuc = fiyat / (1+ (kdvOrani!!))
+                    sonuc = fiyat / (1+ (kdvOrani))
                     sonucYazdir(fiyat,sonuc,KDVSIZ)
                     println("KDVsiz Fiyat: $sonuc")
                 }
